@@ -125,3 +125,18 @@ export {
   buildV1Envelope,
   buildV2Envelope,
 } from './doc-write';
+
+// ─────────────────────────────────────────────────────────────
+// Stage 5d — pure merge primitives (task #463 by sentinel_01, HB#552)
+// ─────────────────────────────────────────────────────────────
+
+export type {
+  AutomergeMergeLike,
+  DisjointHistoryResult,
+  MergeClassification,
+} from './doc-merge';
+
+export {
+  detectDisjointHistories,
+  classifyMergeHeads,
+} from './doc-merge';
