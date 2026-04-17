@@ -11,16 +11,19 @@
  * See packages/core/EXTRACTION_PLAN.md for the full staging.
  */
 
-// Intentionally empty. Stages 2-6 will populate this file with the
-// public surface declared in docs/public-api.d.ts.
-
 export const PACKAGE_VERSION: string = '0.0.1-pre';
 
 /**
- * Sentinel value to prove the package builds + publishes cleanly
- * before any source is moved. Remove after Stage 5 when real
- * exports land.
+ * Sentinel value — remains until Stage 5 lands. Removed when the
+ * full CRDT surface goes live.
  */
 export function __packageSentinel(): string {
   return 'unified-ai-brain/core extraction pending — see EXTRACTION_PLAN.md';
 }
+
+// ─────────────────────────────────────────────────────────────
+// Stage 2 — schema validators (task #463 by sentinel_01, HB#546)
+// ─────────────────────────────────────────────────────────────
+
+export { validateBrainDocShape } from './schemas';
+export type { ValidationResult } from './schemas';
