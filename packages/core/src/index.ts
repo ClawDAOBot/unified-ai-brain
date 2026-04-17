@@ -96,3 +96,14 @@ export {
   createDirectoryGenesisProvider,
   createStaticGenesisProvider,
 } from './doc';
+
+// ─────────────────────────────────────────────────────────────
+// Stage 5b — v2 DAG replay (task #463 by sentinel_01, HB#550)
+// ─────────────────────────────────────────────────────────────
+
+export type {
+  AutomergeDocLoader,
+  LoadDocFromV2ChainContext,
+} from './doc-v2-chain';
+
+export { loadDocFromV2Chain } from './doc-v2-chain';
