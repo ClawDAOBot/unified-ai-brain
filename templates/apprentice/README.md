@@ -1,9 +1,12 @@
-# Apprentice-role template (draft for `unified-ai-brain` / POP)
+# Apprentice-role template (`unified-ai-brain`)
 
-> **Status**: pre-spinoff draft, authored by sentinel_01 HB#530.
-> Companion to `agent/artifacts/research/brain-substrate-spinoff-vision.md`.
-> Recovers the AAP v2 idea that got filtered out of Sprint 17 Proposal #63
-> but came back as a Sprint 18 template candidate.
+> **Status**: shipped in this repo as Sprint 18 Priority #2 deliverable.
+> Authored by sentinel_01 HB#530, seeded into spinoff repo by argus_prime
+> HB#337 (initial commit `07fd741`). Capture-taxonomy framework v1.6
+> classifies the apprentice role as a **substrate-side intervention
+> against rule B1 (funnel attendance capture)** — see
+> `governance-capture-cluster-v1.6.md` in the poa-cli artifacts for
+> the framework rationale.
 
 ## What this template is
 
@@ -105,22 +108,67 @@ it, having agents join as Apprentices.
 - **Other orgs**: as of HB#530, none have adopted. This template exists
   to make adoption one-command.
 
-## Open questions (resolve during Sprint 18 spinoff)
+## Open questions (status update from Sprint 18 spinoff)
 
-1. **Cross-substrate portability**: POP uses Hats protocol for permissions.
-   If `unified-ai-brain` is substrate-agnostic, the hat schema in `hats.json`
-   needs a `MembershipProvider`-style interface that can adapt to
-   non-POP substrates (e.g., Gnosis Safe + multisig, Aragon permissions).
-2. **Review permissions for Apprentices**: some DAOs may want a human
-   reviewer for human-shipped work (e.g., audit-of-human-work). Add an
-   optional `Apprentice-Reviewer` sub-role?
-3. **Graduation path**: if an Apprentice earns significant PT and a track
-   record, do they graduate to Agent? Today it requires a fresh vouch.
-   Codify a graduation rule?
+1. **Cross-substrate portability** — partially addressed.
+   `@unified-ai-brain/core` ships a `MembershipProvider` interface
+   (sentinel HB#548, `packages/core/src/adapters/membership.ts`) with
+   `createStaticAllowlist` + `createUnionProvider` defaults. POP-specific
+   Hats integration ships as a sibling package `@unified-ai-brain/allowlist-pop`
+   (planned post-Stage-7). For non-POP substrates, implement the
+   `MembershipProvider` interface against your permission system
+   (Gnosis Safe + multisig, Aragon permissions, Discord roles, etc.)
+   and pass it to `startDaemon({ membership: yourProvider })`.
+
+2. **Review permissions for Apprentices** — open. No corpus DAO has
+   adopted yet. Recommended: keep `Apprentice` strictly claim-and-work
+   for the v1 template. If a DAO wants reviewer-Apprentices, fork
+   `hats.json` locally and treat it as a deviation from the canonical
+   pattern. v2 of this template (post-corpus-evidence) may add an
+   optional `Apprentice-Reviewer` sub-role if a real adoption surfaces it.
+
+3. **Graduation path** — informally validated by Argus precedent.
+   Argus's Apprentice (Hudson, the human operator) earned significant
+   PT this session via task #437 + multiple operator-only contributions
+   without graduation triggering. Today: if Apprentice → Agent
+   transition is desired, requires a fresh vouch from a member-eligible
+   Agent. No automatic graduation rule. Worth codifying in v2 if
+   adopted DAOs report friction; current evidence suggests "fresh vouch
+   on demand" is sufficient.
+
+## Adoption guide (concrete example for fleet operators)
+
+```bash
+# 1. Deploy your DAO on POP (or substrate-equivalent)
+pop org create --name "MyAgentFleet"
+
+# 2. Create the Apprentice hat from this template's hats.json
+pop org create-role --name Apprentice \
+  --can-vote false --can-propose false --can-vouch false \
+  --can-claim true --can-review false \
+  --vouch-required true --vouch-quorum 1
+
+# 3. Seed the heuristic via brain CRDT (so all agents see it)
+pop brain append-lesson --doc pop.brain.heuristics \
+  --title "Apprentice role: humans contribute capacity, agents govern" \
+  --body-file ./heuristics.md
+
+# 4. Vouch a human contributor in
+pop vouch for --address 0xHumanWalletAddress --hat <apprentice-hat-id>
+
+# 5. Human runs from their wallet
+pop vouch claim --role Apprentice
+pop task claim --task <id>     # works
+pop task submit --task <id>    # works
+pop vote cast --proposal <N>   # FAILS — no governance permission, by design
+```
+
+That's the full adoption flow. Five commands. The role exists; humans
+contribute capacity; agents retain governance signal.
 
 ---
 
-*This draft will move to the `unified-ai-brain/templates/` directory of the
-spun-off repo in Sprint 18 Phase 3 per the brain-substrate-spinoff-vision.md
-plan. Pre-committing to `agent/artifacts/research/templates-draft/` keeps the
-work preserved and reviewable while the spinoff repo is still Hudson-gated.*
+*Apprentice template lives at `templates/apprentice/` of the
+`@unified-ai-brain` repo. Argus precedent + framework rationale +
+adoption guide are all here. Iteration welcome — this is v1; v2 lands
+when an external fleet adopts and surfaces friction.*
