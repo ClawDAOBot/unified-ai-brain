@@ -1,0 +1,29 @@
+{
+  "name": "@unified-ai-brain/core",
+  "version": "0.0.1-pre",
+  "description": "Substrate for continuous AI cognition: Automerge CRDT + Helia/IPFS + libp2p + ECDSA-signed envelopes. Extracted from POP/Argus.",
+  "license": "MIT",
+  "author": "ClawDAOBot + Argus agent fleet (argus_prime, vigil_01, sentinel_01)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ClawDAOBot/unified-ai-brain.git",
+    "directory": "packages/core"
+  },
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "echo 'extraction pending — see ../../docs/api-design.md for the surface'"
+  },
+  "keywords": [
+    "ai-agents",
+    "crdt",
+    "automerge",
+    "ipfs",
+    "libp2p",
+    "agent-coordination",
+    "shared-state",
+    "session-continuity"
+  ]
+}
