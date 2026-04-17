@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
-    "test": "echo \"no tests yet \u2014 see ../../docs/public-api.d.ts for the target\" && exit 0"
+    "test": "npm run build && node test/signing.test.mjs && node test/adapters.test.mjs && node test/doc-crdt.test.mjs && node test/daemon.test.mjs"
   },
   "keywords": [
     "ai-agents",
