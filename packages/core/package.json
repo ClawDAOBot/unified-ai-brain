@@ -14,7 +14,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "echo 'extraction pending — see ../../docs/api-design.md for the surface'"
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "test": "echo \"no tests yet \u2014 see ../../docs/public-api.d.ts for the target\" && exit 0"
   },
   "keywords": [
     "ai-agents",
@@ -25,5 +27,21 @@
     "agent-coordination",
     "shared-state",
     "session-continuity"
-  ]
+  ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
 }
