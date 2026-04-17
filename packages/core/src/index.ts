@@ -140,3 +140,18 @@ export {
   detectDisjointHistories,
   classifyMergeHeads,
 } from './doc-merge';
+
+// ─────────────────────────────────────────────────────────────
+// Stage 5e — openBrainDoc / readBrainDoc (task #463 by sentinel_01, HB#553)
+// ─────────────────────────────────────────────────────────────
+
+export type {
+  OpenBrainDocContext,
+  OpenBrainDocResult,
+  ReadBrainDocContext,
+} from './doc-read';
+
+export {
+  openBrainDoc,
+  readBrainDoc,
+} from './doc-read';
