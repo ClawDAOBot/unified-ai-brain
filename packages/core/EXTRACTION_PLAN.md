@@ -68,3 +68,66 @@
 ## Ship cadence
 
 Target one stage per heartbeat. 8 stages = 8 HB minimum. Given poa-cli tests must stay green throughout, each stage should be committable standalone.
+
+---
+
+## Stage 7 cutover plan (added HB#597 by sentinel_01, for Hudson-gated decision)
+
+Stages 1-6.5 are shipped (commits 3bbe6ba → cc139e1). Stage 7 has been flagged as Hudson-gated because it requires a decision on the dependency-resolution strategy. Documented here for clean execution when Hudson's available.
+
+### Decision: how does poa-cli consume @unified-ai-brain/core?
+
+**Option A — npm publish first (Stage 8 before Stage 7)**
+Pros: cleanest long-term, standard dep resolution, version pinning works
+Cons: requires Hudson's npm account setup + org registration; adds public-first pressure before integration-validated
+Decision criteria: Hudson decides whether `@unified-ai-brain/*` org is ready to register
+
+**Option B — git-submodule the unified-ai-brain repo into poa-cli**
+Pros: deterministic, reproducible across machines, doesn't require npm
+Cons: git-submodule pain (clone-needs-init, submodule-update-dance), harder to iterate on both repos
+Decision criteria: tolerance for submodule UX friction
+
+**Option C — machine-local file: dep during dev**
+Pros: fastest iteration, no publish/submodule overhead
+Cons: NOT committable (machine-specific paths), can't ship to CI, blocks cross-agent development
+Decision criteria: only if Stage 7 is treated as a single-agent prototype, not committed work
+
+### Recommended path (pending Hudson signal)
+
+Option A (publish first) is the cleanest. Sequence:
+1. Hudson registers @unified-ai-brain/* npm org (or grants agent-wallet publish access)
+2. Sentinel bumps packages/core/package.json version 0.0.1-pre → 0.1.0
+3. Sentinel runs `npm publish` from packages/core/
+4. poa-cli package.json adds `"@unified-ai-brain/core": "^0.1.0"` as a real dep
+5. Replace internal imports in poa-cli one module at a time (starting with schemas, then signing, then adapters)
+6. Each replacement: yarn build clean + yarn test green before next
+7. Final: poa-cli/src/lib/brain-signing.ts becomes a thin re-export wrapper (or deleted entirely)
+
+Option B is the fallback if npm publish is delayed. Same sequence except file: dep points at a submodule path.
+
+### First module to rewire: validateBrainDocShape (schemas.ts)
+
+Smallest surface + no runtime deps. Good smoke test.
+
+poa-cli/src/lib/brain-schemas.ts currently exports `validateBrainDocShape`. After rewire:
+```typescript
+// Before:
+export { validateBrainDocShape } from './internal-validator';
+
+// After:
+export { validateBrainDocShape } from '@unified-ai-brain/core';
+```
+
+If that works end-to-end (yarn build + yarn test green), proceed to brain-signing.ts, then adapters, then daemon.
+
+### Test checklist per module-rewire
+
+- [ ] `yarn build` in poa-cli succeeds
+- [ ] `yarn test` in poa-cli: all 416+ tests still pass
+- [ ] `pop brain daemon status` still works
+- [ ] `pop brain read --doc pop.brain.shared` still works
+- [ ] Round-trip: write a lesson + read it back; byte-equal payload
+
+### Stage 8 ships after Stage 7 completes
+
+Stage 7 = rewire all modules. Stage 8 = publish 0.1.0 + cut over poa-cli to depend on published version (removes any file:/submodule intermediary).
