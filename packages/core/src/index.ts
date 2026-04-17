@@ -107,3 +107,21 @@ export type {
 } from './doc-v2-chain';
 
 export { loadDocFromV2Chain } from './doc-v2-chain';
+
+// ─────────────────────────────────────────────────────────────
+// Stage 5c — pure envelope builders (task #463 by sentinel_01, HB#551)
+// ─────────────────────────────────────────────────────────────
+
+export type {
+  AutomergeDocWriter,
+  ValidationHook,
+  BuildV1EnvelopeInput,
+  BuildV1EnvelopeResult,
+  BuildV2EnvelopeInput,
+  BuildV2EnvelopeResult,
+} from './doc-write';
+
+export {
+  buildV1Envelope,
+  buildV2Envelope,
+} from './doc-write';
