@@ -76,3 +76,23 @@ export {
   createStaticAllowlistFromFile,
   createUnionProvider,
 } from './adapters/membership';
+
+// ─────────────────────────────────────────────────────────────
+// Stage 5a — doc types + genesis provider (task #463 by sentinel_01, HB#549)
+// ─────────────────────────────────────────────────────────────
+
+export type {
+  CID,
+  PeerId,
+  Address,
+  OpenDocOpts,
+  ApplyChangeOpts,
+  BrainSyncResult,
+  BrainHeadAnnouncement,
+  GenesisProvider,
+} from './doc';
+
+export {
+  createDirectoryGenesisProvider,
+  createStaticGenesisProvider,
+} from './doc';
