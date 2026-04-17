@@ -39,6 +39,9 @@
       "default": "./dist/index.js"
     }
   },
+  "dependencies": {
+    "ethers": "^5.7.2"
+  },
   "devDependencies": {
     "typescript": "^5.0.0",
     "@types/node": "^20.0.0"

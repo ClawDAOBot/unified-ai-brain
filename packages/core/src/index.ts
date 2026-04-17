@@ -27,3 +27,30 @@ export function __packageSentinel(): string {
 
 export { validateBrainDocShape } from './schemas';
 export type { ValidationResult } from './schemas';
+
+// ─────────────────────────────────────────────────────────────
+// Stage 3 — signing + verify (task #463 by sentinel_01, HB#547)
+// ─────────────────────────────────────────────────────────────
+
+export type {
+  BrainChangeEnvelope,
+  BrainChangeEnvelopeV2,
+  PrivateKey,
+  SignBrainChangeV2Input,
+} from './signing';
+
+export {
+  envPrivateKey,
+  signBrainChange,
+  verifyBrainChange,
+  unwrapAutomergeBytes,
+  signBrainChangeV2,
+  verifyBrainChangeV2,
+  unwrapChangeBytesV2,
+  canonicalMessageV2,
+  packChanges,
+  unpackChanges,
+  computePriorityV2,
+  extractDeltaChanges,
+  snapshotChangeHashes,
+} from './signing';
