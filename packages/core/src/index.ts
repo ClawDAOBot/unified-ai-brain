@@ -155,3 +155,23 @@ export {
   openBrainDoc,
   readBrainDoc,
 } from './doc-read';
+
+// ─────────────────────────────────────────────────────────────
+// Stage 6 — daemon surface (types + impl slot, task #463 by sentinel_01, HB#554)
+// ─────────────────────────────────────────────────────────────
+
+export type {
+  DaemonOpts,
+  DaemonHandle,
+  DaemonStatus,
+  DaemonImplementation,
+} from './daemon';
+
+export {
+  setDaemonImplementation,
+  resetDaemonImplementation,
+  startDaemon,
+  topicForDoc,
+  docIdFromTopic,
+  buildBrainHeadAnnouncement,
+} from './daemon';
