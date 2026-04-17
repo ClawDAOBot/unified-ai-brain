@@ -54,3 +54,25 @@ export {
   extractDeltaChanges,
   snapshotChangeHashes,
 } from './signing';
+
+// ─────────────────────────────────────────────────────────────
+// Stage 4 — adapters (task #463 by sentinel_01, HB#548)
+// ─────────────────────────────────────────────────────────────
+
+export type {
+  HeadsManifestStore,
+  FilesystemStoreOptions,
+} from './adapters/heads-manifest';
+
+export {
+  createFilesystemStore,
+  createMemoryStore,
+} from './adapters/heads-manifest';
+
+export type { MembershipProvider } from './adapters/membership';
+
+export {
+  createStaticAllowlist,
+  createStaticAllowlistFromFile,
+  createUnionProvider,
+} from './adapters/membership';
