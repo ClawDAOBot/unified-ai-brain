@@ -89,6 +89,42 @@ function validateLesson(lesson: any, index: number, errors: string[]): void {
       }
     }
   }
+  // Task #509 (poa-cli HB#963 sentinel; back-ported here HB#979): optional
+  // causedBy field. Single string (single-parent) or array of strings
+  // (multi-parent — synthesis integrating multiple priors). Each entry must
+  // be a non-empty string lesson id. Backwards compatible: existing lessons
+  // without causedBy validate unchanged. Powers `pop brain thread` ancestry+
+  // descendant chain walks.
+  if (lesson.causedBy != null) {
+    const cb = lesson.causedBy;
+    if (typeof cb === 'string') {
+      if (cb.length === 0) {
+        errors.push(`lessons[${index}]: causedBy must be a non-empty string id`);
+      }
+    } else if (Array.isArray(cb)) {
+      for (let i = 0; i < cb.length; i++) {
+        if (typeof cb[i] !== 'string' || cb[i].length === 0) {
+          errors.push(`lessons[${index}]: causedBy[${i}] must be a non-empty string id`);
+        }
+      }
+    } else {
+      errors.push(`lessons[${index}]: causedBy must be a string or array of strings`);
+    }
+  }
+  // Task #510 (poa-cli HB#965 sentinel; back-ported here HB#979): optional
+  // delegateTo field — single ethereum address for claim-signaling sub-type.
+  // Format: 0x-prefixed 40-hex-char string, case-insensitive (writers
+  // normalize to lowercase). Backwards compatible.
+  if (lesson.delegateTo != null) {
+    const dt = lesson.delegateTo;
+    if (typeof dt !== 'string') {
+      errors.push(`lessons[${index}]: delegateTo must be a string`);
+    } else if (!/^0x[0-9a-fA-F]{40}$/.test(dt)) {
+      errors.push(
+        `lessons[${index}]: delegateTo must be a 0x-prefixed 40-hex-char ethereum address (got "${dt}")`,
+      );
+    }
+  }
 }
 
 function validateRule(rule: any, index: number, errors: string[]): void {
